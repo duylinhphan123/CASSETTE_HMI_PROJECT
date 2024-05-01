@@ -1,0 +1,93 @@
+#include <Arduino.h>
+#include <RTClib.h>
+static bool playback_enable = 0;
+static bool sw_stat = 0;
+static bool old_sw_stat = 0;
+static bool program_stat = 0;
+static bool direction = 1;
+
+
+
+static bool encoder_stat = 0;
+static bool calculate_direction = 0;
+static bool old_encoder_stat = 0;
+static bool old_playback_enable = 0;
+static bool stop_flag = 0;
+static byte encoder_simulation_state = 0;
+const static byte numChars = 32;
+char receivedChars[numChars];
+char receivedChars2[numChars];
+char receivedChars3[numChars];
+static boolean newData = false;
+static int32_t pos = 0;
+String header;
+static int tag = 0;
+static bool button_state[6] = {0, 0, 0, 0, 0, 0};
+static byte total_time[3] = {0, 0, 0};
+static bool press_flag = 0;
+static bool cue_send_flag = 0;
+static byte total_hrs = 0;
+static byte total_minute = 0;
+static byte total_second = 0;
+static bool total_checked = 0;
+static bool old_direction;
+char im[128], ADC_DATA[128];
+char x = 0, ylim = 80;
+static int L_AUDIO_ANALOG_VALUE = 0;
+static int R_AUDIO_ANALOG_VALUE = 0;
+volatile static uint32_t timer_print_band = 0;
+static int32_t MAX_ADC_VALUE = 0;
+static int32_t MIN_ADC_VALUE = 0;
+static bool sample_flag = 0;
+static int datak[64];
+static bool timer_flag[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+static bool timer_start_flag[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+static uint32_t timer_counter[15];
+int data_sound = 0;
+static bool compare_enable = 0;
+static byte counter_silence = 0;
+static byte counter_non_silence = 0;
+static bool old_sample_flag = 0;
+static bool servo_control_enable[5] = {0, 0, 0, 0, 0};
+static bool old_press_flag = 0;
+static bool BT_MODE[6] = {0, 0, 0, 0, 0, 0};
+//static byte old_second = 0;
+static byte timer_counter_cycle[5] = {0, 0, 0, 0, 0};
+static bool wait_enable = 0;
+static bool sw_enable = 0;
+static byte situation = 0;
+static bool stop_to_press_flag = 0;
+static byte button_stop_wait = 0;
+static uint32_t encoder_time = 0;
+static int temp_angle = 0;
+static byte old_encoder_simulation_state;
+volatile static uint32_t eq_time_sample = 0;
+
+static byte svtag = 0;
+static bool playing_mode = 0;
+
+static bool DOUBLE_CLICK_DETECT = 0;
+static byte CLICK_COUNTER = 0;
+static volatile uint32_t CLICK_SAMPLE = 0;
+static bool DOUBLE_CLICK_FLAG = 0;
+static byte DOUBLE_CLICK_WAIT = 0;
+static bool PRESS_FLAG = 0;
+static bool SINGLE_CLICK_FLAG = 0;
+static byte SINGLE_CLICK_WAIT = 0;
+static bool SINGLE_CLICK_MODE = 0;
+static bool DOUBLE_CLICK_MODE = 1;
+static bool data_SW = 0;
+static bool data_IR_COMMAND_CODE = 0;
+static byte data_IR_COMMAND_TYPE = 0;
+
+static byte track = 1;
+static int32_t last_revolution = 0;
+static int32_t current_angle = 0;
+static int32_t current_revolution = 0;
+static int32_t last_angle2 = 0;
+static int32_t revolution = 0;
+static int32_t old_angle3 = 0;
+//void (*uart)(String,int,int32_t);
+//static uint32_t RTC_WAIT_TIME = 0;
+// void (*sendtt)(byte*,byte*,byte*);
+// static boolean RTC_FLAG = 0;
